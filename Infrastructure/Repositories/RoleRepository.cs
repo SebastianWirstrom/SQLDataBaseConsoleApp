@@ -3,9 +3,7 @@ using Infrastructure.Entities;
 
 namespace Infrastructure.Repositories;
 
-public class CategoryRepository(DataContext context) : BaseRepo<CategoryEntity>(context)
+public class RoleRepository(DataContext context) : BaseRepo<RoleEntity>(context)
 {
     private readonly DataContext _context = context;
 }
-
-

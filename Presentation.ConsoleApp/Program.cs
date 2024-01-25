@@ -10,6 +10,9 @@ var builder = Host.CreateDefaultBuilder().ConfigureServices(services =>
 
     services.AddScoped<AddressRepository>();
     services.AddScoped<CategoryRepository>();
+    services.AddScoped<CustomerRepository>();
+    services.AddScoped<ProductRepository>();
+    services.AddScoped<RoleRepository>();
     
 }).Build();
 
