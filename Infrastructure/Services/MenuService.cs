@@ -1,16 +1,13 @@
-﻿namespace Infrastructure.Services;
+﻿using Infrastructure.Interfaces;
+namespace Infrastructure.Services;
 
-
-
-public class MenuService
+public interface IMenuService
 {
-    private readonly MenuService _menuService = new MenuService();
+    void ShowMainMenu();
+}
 
-    public MenuService()
-    {
-        void ShowMainMenu();
-    }
-
+public class MenuService : IMenuService
+{
     public void ShowMainMenu()
     {
         while (true)
@@ -59,6 +56,27 @@ public class MenuService
             }
         }
     }
+    public void ShowCreateNewCustomerMenu()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowDeleteCustomerMenu()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowGetCustomerMenu()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ShowGetCustomersMenu()
+    {
+        throw new NotImplementedException();
+    }
+
+    
 
 
 
