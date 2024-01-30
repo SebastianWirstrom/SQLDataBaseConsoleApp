@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Contexts;
+using Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Diagnostics;
@@ -68,15 +69,15 @@ namespace Infrastructure.Repositories
         }
 
         // UPDATE
-        public virtual TEntity Update (TEntity entity) 
+        public virtual TEntity Update(Expression<Func<TEntity, bool>> predicate, TEntity entity) 
         {
             try
             {
-                var entityToUpdate = _context.Set<TEntity>().Find(entity);
+                var entityToUpdate = _context.Set<TEntity>().FirstOrDefault(predicate);
                 if (entityToUpdate != null)
                 {
-                    entityToUpdate = entity;
-                    _context.Set<TEntity>().Update(entityToUpdate);
+                    
+                    _context.Entry(entityToUpdate).CurrentValues.SetValues(entity);
                     _context.SaveChanges();
                     return entityToUpdate;
                 }
