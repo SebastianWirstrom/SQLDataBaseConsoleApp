@@ -16,7 +16,6 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        // CREATE
         public virtual TEntity Create(TEntity entity)
         {
             try
@@ -31,8 +30,7 @@ namespace Infrastructure.Repositories
             }
             return null!;
         }
-
-        // READ
+       
         public virtual IEnumerable<TEntity> GetAll()
         {
             try
@@ -50,7 +48,6 @@ namespace Infrastructure.Repositories
             return null!;
         }
 
-        // READ ONE
         public virtual TEntity GetSingle(Expression<Func<TEntity, bool>> predicate)
         {
             try
@@ -67,8 +64,6 @@ namespace Infrastructure.Repositories
             }
             return null!;
         }
-
-        // UPDATE
         public virtual TEntity Update(Expression<Func<TEntity, bool>> predicate, TEntity entity) 
         {
             try
@@ -89,7 +84,7 @@ namespace Infrastructure.Repositories
             return null!;
         }
 
-        // DELETE
+        
         public virtual bool Delete(Expression<Func<TEntity, bool>> predicate)
         {
             try
@@ -109,7 +104,7 @@ namespace Infrastructure.Repositories
             return false;
         }
 
-        // EXISTS
+        
         public virtual bool Exists(Expression<Func<TEntity, bool>> predicate)
         {
             try
