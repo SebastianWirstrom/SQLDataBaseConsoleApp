@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Entities;
 using Infrastructure.Repositories;
 using Microsoft.Identity.Client;
+using System.Diagnostics;
 
 namespace Infrastructure.Services;
 
@@ -10,16 +11,24 @@ public class CategoryService(CategoryRepository categoryRepository)
 
     public CategoryEntity CreateCategory(string categoryName)
     {
-        var categoryEntity = _categoryRepository.GetSingle(x => x.CategoryName == categoryName);
-        if (categoryEntity == null) 
+        try
         {
-            categoryEntity = _categoryRepository.Create(new CategoryEntity { CategoryName = categoryName });
-            return categoryEntity;
+            var categoryEntity = _categoryRepository.GetSingle(x => x.CategoryName == categoryName);
+            if (categoryEntity != null)
+            {
+                
+                return categoryEntity;
+            }
+
+            categoryEntity = new CategoryEntity { CategoryName = categoryName };
+            return _categoryRepository.Create(categoryEntity);
         }
-        else
+        catch (Exception ex)
         {
-            return null!;
+            Debug.WriteLine(ex.Message);
         }
+        return null!;
+     
     }
 
     public CategoryEntity GetCategoryByName(string categoryName)

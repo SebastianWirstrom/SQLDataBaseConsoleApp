@@ -1,38 +1,60 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.DTOs;
+using Infrastructure.Entities;
 using Infrastructure.Repositories;
+using System.Diagnostics;
 
 namespace Infrastructure.Services
 {
-    public class ProductService(CategoryRepository categoryService, ProductRepository productRepository)
+    public class ProductService(CategoryService categoryService, ProductRepository productRepository)
     {
         private readonly ProductRepository _productRepository = productRepository;
-        private readonly CategoryRepository _categoryService = categoryService;
+        private readonly CategoryService _categoryService = categoryService;
 
-        public RoleEntity GetProductByName(string roleName)
+        public ProductEntity CreateProduct(ProductDTO product)
         {
-            var RoleEntity = _productRepository.GetSingle(x => x.RoleName == roleName);
-            return RoleEntity;
+            try
+            {
+                var categoryEntity = _categoryService.CreateCategory(product.CategoryName);
+                if (categoryEntity != null)
+                {
+                    var productEntity = new ProductEntity
+                    {
+                        Title = product.Title,
+                        Description = product.Description,
+                        Price = product.Price,
+                        CategoryId = categoryEntity!.Id,
+                    };
+
+                    productEntity = _productRepository.Create(productEntity);
+                    return productEntity;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.Message);
+            }
+            return null!;
         }
 
-        public RoleEntity GetRoleById(int id)
+        public ProductEntity GetProductById(int id)
         {
-            var RoleEntity = _productRepository.GetSingle(x => x.Id == id);
-            return RoleEntity;
+            var productEntity = _productRepository.GetSingle(x => x.Id == id);
+            return productEntity;
         }
 
-        public IEnumerable<RoleEntity> GetRoles()
+        public IEnumerable<ProductEntity> GetProducts()
         {
-            var roles = _productRepository.GetAll();
-            return roles;
+            var products = _productRepository.GetAll();
+            return products;
         }
 
-        public RoleEntity UpdateRole(RoleEntity RoleEntity)
+        public ProductEntity UpdateProduct(ProductEntity productEntity)
         {
-            var updatedRoleEntity = _productRepository.Update(x => x.Id == RoleEntity.Id, RoleEntity);
-            return updatedRoleEntity;
+            var updatedProductEntity = _productRepository.Update(x => x.Id == productEntity.Id, productEntity);
+            return updatedProductEntity;
         }
 
-        public bool DeleteRole(int id)
+        public bool DeleteProduct(int id)
         {
             _productRepository.Delete(x => x.Id == id);
             return true;

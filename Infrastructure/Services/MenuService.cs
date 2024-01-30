@@ -1,83 +1,53 @@
-﻿using Infrastructure.Interfaces;
-namespace Infrastructure.Services;
+﻿using Infrastructure.DTOs;
+using Infrastructure.Services;
+using System.Diagnostics;
 
-public interface IMenuService
-{
-    void ShowMainMenu();
-}
+namespace Presentation.ConsoleApp;
 
-public class MenuService : IMenuService
+public class MenuService(ProductService productService)
 {
-    public void ShowMainMenu()
+    private readonly ProductService _productService = productService;
+
+    public void CreateProductMenu()
     {
-        while (true)
+        try
         {
             Console.Clear();
-            Console.WriteLine("");
-            Console.WriteLine("_________________________");
-            Console.WriteLine("1. Create new customer");
-            Console.WriteLine("2. Find customer my e-mail");
-            Console.WriteLine("3. Show all existing customers");
-            Console.WriteLine("4. Update existing customer");
-            Console.WriteLine("5. Delete existing customer");
-            Console.WriteLine("");
-            Console.WriteLine("0. Exit application");
-            Console.WriteLine("");
-            Console.Write("Select an option to proceed: ");
+            Console.WriteLine("Create Product");
 
-            var option = Console.ReadLine()!;
+            var product = new ProductDTO();
 
-            switch (option)
+            Console.Write("Product Title: ");
+            product.Title = Console.ReadLine()!;
+
+            Console.Write("Product Price: ");
+            product.Price = decimal.Parse(Console.ReadLine()!);
+
+            Console.Write("Product Description: ");
+            product.Description = Console.ReadLine()!;
+
+            Console.Write("Product Category: ");
+            product.CategoryName = Console.ReadLine()!;
+
+            var result = _productService.CreateProduct(product);
+            if (result != null)
             {
-                case "1":
-
-                    break;
-
-                case "2":
-                    break;
-
-                case "3":
-                    break;
-
-                case "4":
-                    break;
-
-                case "5":
-                    break;
-
-                case "0":
-                    break;
-
-                default:
-                    Console.Clear();
-                    Console.WriteLine("Invalid option selected. Press any key to try again.");
-                    Console.ReadKey();
-                    break;
+                Console.Clear();
+                Console.WriteLine($"Product (Article number: {result.Id}) was created. \n" +
+                    $"Title: {result.Title} \n" +
+                    $"Description: {result.Description}\n" +
+                    $"Price: {result.Price} \n" +
+                    $"Category: {result.Category}");
+                Console.WriteLine();
+                Console.Write("Press any key to proceed");
+                Console.ReadKey();
             }
         }
+        catch (Exception ex)
+        {
+            Debug.Write(ex.Message);
+        }
+        
     }
-    public void ShowCreateNewCustomerMenu()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void ShowDeleteCustomerMenu()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void ShowGetCustomerMenu()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void ShowGetCustomersMenu()
-    {
-        throw new NotImplementedException();
-    }
-
-    
-
-
-
 }
+

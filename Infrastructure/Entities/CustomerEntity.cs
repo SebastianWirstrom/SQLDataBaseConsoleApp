@@ -18,7 +18,7 @@ namespace Infrastructure.Entities
 
         [Required]
         public int RoleId { get; set; }
-        public RoleEntity Roles { get; set; } = null!;
+        public RoleEntity Role { get; set; } = null!;
 
         [Required]
         public int AddressId { get; set; }

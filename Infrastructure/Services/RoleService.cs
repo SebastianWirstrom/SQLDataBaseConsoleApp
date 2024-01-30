@@ -9,11 +9,11 @@ public class RoleService(RoleRepository roleRepository)
 
     public RoleEntity CreateRole(string roleName)
     {
-        var RoleEntity = _roleRepository.GetSingle(x => x.RoleName == roleName);
-        if (RoleEntity == null)
+        var roleEntity = _roleRepository.GetSingle(x => x.RoleName == roleName);
+        if (roleEntity == null)
         {
-            RoleEntity = _roleRepository.Create(new RoleEntity { RoleName = roleName });
-            return RoleEntity;
+            roleEntity = _roleRepository.Create(new RoleEntity { RoleName = roleName });
+            return roleEntity;
         }
         else
         {
@@ -23,14 +23,14 @@ public class RoleService(RoleRepository roleRepository)
 
     public RoleEntity GetRoleByName(string roleName)
     {
-        var RoleEntity = _roleRepository.GetSingle(x => x.RoleName == roleName);
-        return RoleEntity;
+        var roleEntity = _roleRepository.GetSingle(x => x.RoleName == roleName);
+        return roleEntity;
     }
 
     public RoleEntity GetRoleById(int id)
     {
-        var RoleEntity = _roleRepository.GetSingle(x => x.Id == id);
-        return RoleEntity;
+        var roleEntity = _roleRepository.GetSingle(x => x.Id == id);
+        return roleEntity;
     }
 
     public IEnumerable<RoleEntity> GetRoles()
@@ -39,9 +39,9 @@ public class RoleService(RoleRepository roleRepository)
         return roles;
     }
 
-    public RoleEntity UpdateRole(RoleEntity RoleEntity)
+    public RoleEntity UpdateRole(RoleEntity roleEntity)
     {
-        var updatedRoleEntity = _roleRepository.Update(x => x.Id == RoleEntity.Id, RoleEntity);
+        var updatedRoleEntity = _roleRepository.Update(x => x.Id == roleEntity.Id, roleEntity);
         return updatedRoleEntity;
     }
 
