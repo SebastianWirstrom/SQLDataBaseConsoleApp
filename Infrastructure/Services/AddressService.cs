@@ -1,5 +1,7 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.DTOs;
+using Infrastructure.Entities;
 using Infrastructure.Repositories;
+using System.Diagnostics;
 
 namespace Infrastructure.Services
 {
@@ -7,16 +9,27 @@ namespace Infrastructure.Services
     {
         private readonly AddressRepository _addressRepository = addressRepository;
 
-        public AddressEntity CreateAddress(string streetName, string postalCode, string city)
+        public AddressEntity CreateAddress(AddressDTO address)
         {
-            var addressEntity = _addressRepository.GetSingle(x => x.StreetName == streetName && x.PostalCode == postalCode && x.City == city);
-            if (addressEntity == null)
+            try
             {
-                addressEntity = _addressRepository.Create(new AddressEntity { StreetName = streetName, PostalCode = postalCode, City = city });
+                var addressEntity = _addressRepository.GetSingle(x => x.StreetName == address.StreetName && x.PostalCode == address.PostalCode && x.City == address.City);
+                if (addressEntity == null)
+                {
+                    addressEntity = _addressRepository.Create(new AddressEntity
+                    {
+                        StreetName = address.StreetName,
+                        PostalCode = address.PostalCode,
+                        City = address.City
+                    });
+                }
                 return addressEntity;
             }
-            else
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Exception in CreateAddress: {ex}");
+                
+                Debug.WriteLine(ex.StackTrace);
                 return null!;
             }
         }

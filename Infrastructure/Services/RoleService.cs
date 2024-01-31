@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Entities;
 using Infrastructure.Repositories;
+using System.Diagnostics;
 
 namespace Infrastructure.Services;
 
@@ -9,16 +10,22 @@ public class RoleService(RoleRepository roleRepository)
 
     public RoleEntity CreateRole(string roleName)
     {
-        var roleEntity = _roleRepository.GetSingle(x => x.RoleName == roleName);
-        if (roleEntity == null)
+        try
         {
-            roleEntity = _roleRepository.Create(new RoleEntity { RoleName = roleName });
+            var roleEntity = _roleRepository.GetSingle(x => x.RoleName == roleName);
+            if (roleEntity == null)
+            {
+                roleEntity = new RoleEntity { RoleName = roleName };
+                roleEntity = _roleRepository.Create(roleEntity);
+            }
             return roleEntity;
         }
-        else
+        catch (Exception ex)
         {
-            return null!;
+            Debug.WriteLine(ex.Message);
         }
+        return null!;
+        
     }
 
     public RoleEntity GetRoleByName(string roleName)

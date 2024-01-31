@@ -1,26 +1,39 @@
-﻿using Infrastructure.Entities;
+﻿using Infrastructure.DTOs;
+using Infrastructure.Entities;
 using Infrastructure.Repositories;
 using System.Diagnostics;
 
 namespace Infrastructure.Services
 {
-    public class CustomerService(CustomerRepository customerRepository, AddressService addressService, RoleService roleService)
+    public class CustomerService(CustomerRepository customerRepository, RoleRepository roleRepository, AddressRepository addressRepository)
     {
         private readonly CustomerRepository _customerRepository = customerRepository;
-        private readonly AddressService _addressService = addressService;
-        private readonly RoleService _roleService = roleService;
+        private readonly AddressRepository _addressRepository = addressRepository;
+        private readonly RoleRepository _roleRepository = roleRepository;
 
-        public CustomerEntity CreateCustomer(string firstName, string lastName, string email, string roleName, string streetName, string postalCode, string city) 
+        public CustomerEntity CreateCustomer(CustomerDTO customer) 
         {
             try
             {
-                var roleEntity = _roleService.CreateRole(roleName);
-                var addressEntity = _addressService.CreateAddress(streetName, postalCode, city);
+                var roleEntity = new RoleEntity 
+                {
+                    RoleName = customer.Role.RoleName
+                };
+                _roleRepository.Create(roleEntity);
+
+                var addressEntity = new AddressEntity
+                {
+                    StreetName = customer.Address.StreetName,
+                    PostalCode = customer.Address.PostalCode,
+                    City = customer.Address.City
+                };
+                _addressRepository.Create(addressEntity);
+
                 var customerEntity = new CustomerEntity
                 {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = email,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email,
                     RoleId = roleEntity.Id,
                     AddressId = addressEntity.Id,
                 };

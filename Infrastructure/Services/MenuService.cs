@@ -4,10 +4,10 @@ using System.Diagnostics;
 
 namespace Presentation.ConsoleApp;
 
-public class MenuService(ProductService productService)
+public class MenuService(ProductService productService, CustomerService customerService)
 {
     private readonly ProductService _productService = productService;
-
+    private readonly CustomerService _customerService = customerService;
 
     public void MainMenu()
     {
@@ -54,8 +54,8 @@ public class MenuService(ProductService productService)
                 GetCustomersMenu();
                 break;
 
-            case: "0":
-                    ShowExitApplicationMenu();
+            case "0":
+                ShowExitApplicationMenu();
                 break;
 
             default:
@@ -65,6 +65,61 @@ public class MenuService(ProductService productService)
             
         }
 
+    }
+    public void CreateCustomerMenu()
+    {
+        try
+        {
+            Console.Clear();
+            Console.WriteLine("Add new Customer");
+
+            var customer = new CustomerDTO();
+
+            Console.Write("First name: ");
+            customer.FirstName = Console.ReadLine()!;
+
+            Console.Write("Last name: ");
+            customer.LastName = Console.ReadLine()!;
+
+            Console.Write("E-mail: ");
+            customer.Email = Console.ReadLine()!;
+
+            Console.Write("Customer company role: ");
+            customer.Role.RoleName = Console.ReadLine()!;
+
+            Console.Write("Street address: ");
+            customer.Address.StreetName = Console.ReadLine()!;
+
+            Console.Write("Zip code: ");
+            customer.Address.PostalCode = Console.ReadLine()!;
+
+            Console.Write("City: ");
+            customer.Address.City = Console.ReadLine()!;
+
+            var result = _customerService.CreateCustomer(customer);
+            if (result != null)
+            {
+                Console.Clear();
+                Console.WriteLine($"Customer {result.FirstName} {result.LastName} (Customer number: {result.Id}) was created. \n" +
+                    $"First name: {result.FirstName} \n" +
+                    $"Last name: {result.LastName}\n" +
+                    $"E-mail: {result.Email} \n" +
+                    $"Role: {result.Role.RoleName} \n" +
+                    $"Street address: {result.Address.StreetName} \n" +
+                    $"Zip code: {result.Address.PostalCode} \n" +
+                    $"Address: {result.Address.StreetName} \n" +
+                    $"City: {result.Address.City}");
+
+                Console.WriteLine();
+                Console.Write("Press any key to proceed");
+                Console.ReadKey();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Write(ex.Message);
+        }
+        
     }
     public void CreateProductMenu()
     {
@@ -95,7 +150,7 @@ public class MenuService(ProductService productService)
                     $"Title: {result.Title} \n" +
                     $"Description: {result.Description}\n" +
                     $"Price: {result.Price} \n" +
-                    $"Category: {result.Category}");
+                    $"Category: {result.Category.CategoryName}");
                 Console.WriteLine();
                 Console.Write("Press any key to proceed");
                 Console.ReadKey();
@@ -105,47 +160,31 @@ public class MenuService(ProductService productService)
         {
             Debug.Write(ex.Message);
         }
-        
+
     }
-    public void CreateCustomerMenu()
+
+    public void GetProductMenu()
     {
-        try
-        {
-            Console.Clear();
-            Console.WriteLine("Create Product");
 
-            var product = new ProductDTO();
+    }
 
-            Console.Write("Product Title: ");
-            product.Title = Console.ReadLine()!;
+    public void GetProductsMenu()
+    {
 
-            Console.Write("Product Price: ");
-            product.Price = decimal.Parse(Console.ReadLine()!);
+    }
 
-            Console.Write("Product Description: ");
-            product.Description = Console.ReadLine()!;
+    public void GetCustomerMenu()
+    {
 
-            Console.Write("Product Category: ");
-            product.CategoryName = Console.ReadLine()!;
+    }
 
-            var result = _productService.CreateProduct(product);
-            if (result != null)
-            {
-                Console.Clear();
-                Console.WriteLine($"Product (Article number: {result.Id}) was created. \n" +
-                    $"Title: {result.Title} \n" +
-                    $"Description: {result.Description}\n" +
-                    $"Price: {result.Price} \n" +
-                    $"Category: {result.Category}");
-                Console.WriteLine();
-                Console.Write("Press any key to proceed");
-                Console.ReadKey();
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.Write(ex.Message);
-        }
+    public void GetCustomersMenu()
+    {
+
+    }
+
+    public void ShowExitApplicationMenu()
+    {
 
     }
 }
